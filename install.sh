@@ -54,7 +54,7 @@ function kubermachines_configure() {
           chmod +x ./kubectl
           mv ./kubectl /usr/local/bin/kubectl
           copy_binary
-      fi
+      
   elif [[ "$OSTYPE" == "darwin"* ]]; then
       if [[ "$BREW" != "" ]]; then
           brew_install_or_upgrade
