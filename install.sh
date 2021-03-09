@@ -1,7 +1,13 @@
 #!/bin/bash
+#
+# Tilt installer
+#
+# Usage:
+#   curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
 
-
-VERSION="0.18.9"
+# When releasing Tilt, the releaser should update this version number
+# AFTER they upload new binaries.
+VERSION="0.18.8"
 BREW=$(command -v brew)
 
 set -e
@@ -46,23 +52,49 @@ function brew_install_or_upgrade() {
   fi
 }
 
-function kubermachines_configure() {
+function kubermachines_install() {
   if [[ "$OSTYPE" == "linux"* ]]; then
           set -x
-          curl -fsSL https://github.com/tilt-dev/tilt/releases/download/v$VERSION/tilt.$VERSION.linux.x86_64.tar.gz | tar -xzv tilt
-          curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+	  echo "****** Installing Docker  *******"
+	  apt install docker.io
+          echo "****** Installing Kubectl ******"
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x ./kubectl
           mv ./kubectl /usr/local/bin/kubectl
+          echo "****** Installing Tilt ******"
+          curl -fsSL https://github.com/tilt-dev/tilt/releases/download/v$VERSION/tilt.$VERSION.linux.x86_64.tar.gz | tar -xzv tilt
           copy_binary
+
   elif [[ "$OSTYPE" == "darwin"* ]]; then
-      if [[ "$BREW" != "" ]]; then
-          brew_install_or_upgrade
-      else
           set -x
+	  echo "****** Installing Docker ******"
+	  set -e
+          EXIT_CODE=0
+          brew install docker || EXIT_CODE=$?
+          echo $EXIT_CODE
+          echo "****** Installing Kubectl ******"
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
+          echo "Installing Tilt *******"
           curl -fsSL https://github.com/tilt-dev/tilt/releases/download/v$VERSION/tilt.$VERSION.mac.x86_64.tar.gz | tar -xzv tilt
           copy_binary
-      fi
+
+  elif [[ "$OSTYPE" == "windows"* ]]; then
+          set -x
+	  echo "****** Installing Docker ******"
+          
+          echo "****** Installing Kubectl *******"
+          curl -LO https://dl.k8s.io/release/v1.20.0/bin/windows/amd64/kubectl.exe
+          Move-Item -Force -Path "kubectl.exe" -Destination "$home\bin\kubectl.exe"
+
+          echo "****** Installing Tilt *******"
+	  Invoke-WebRequest "https://github.com/tilt-dev/tilt/releases/download/v0.18.11/tilt.0.18.11.windows.x86_64.zip" -OutFile "tilt.zip"
+          Expand-Archive "tilt.zip" -DestinationPath "tilt"
+          Move-Item -Force -Path "tilt\tilt.exe" -Destination "$home\bin\tilt.exe"
+
   else
+
       set +x
       echo "The Tilt installer does not work for your platform: $OSTYPE"
       echo "For other installation options, check the following page:"
@@ -103,10 +135,7 @@ function version_check() {
 
 # so that we can skip installation in CI and just test the version check
 if [[ -z $NO_INSTALL ]]; then
-  kubermachines_configure
+  kubermachines_install
 fi
-
 version_check
-
 tilt verify-install
-
