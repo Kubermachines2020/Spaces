@@ -5,7 +5,7 @@ kubermachines() {
         curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/install.sh | bash
     
     elif [[ $@ == "configure" ]]; then 
-	curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/up.sh  | bash
+	curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/configure.sh  | bash
     
     elif [[ $@ == "up" ]]; then
         tilt up
