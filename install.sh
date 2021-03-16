@@ -19,8 +19,8 @@ function copy_binary() {
       fi
       mv tilt "$HOME/.local/bin/tilt"
   else
-      echo "Installing Tilt to /usr/local/bin which is write protected"
-      echo "If you'd prefer to install Tilt without sudo permissions, add \$HOME/.local/bin to your \$PATH and rerun the installer"
+      #echo "Installing Tilt to /usr/local/bin which is write protected"
+      #echo "If you'd prefer to install Tilt without sudo permissions, add \$HOME/.local/bin to your \$PATH and rerun the installer"
       sudo mv tilt /usr/local/bin/tilt
   fi
 }
@@ -129,7 +129,7 @@ function version_check() {
     echo "Perhaps you have a different program named tilt in your \$PATH?"
     exit 1
   else
-    echo "Tilt installed! Run \`tilt up\` to start."
+    echo "Tilt installed!"
   fi
 }
 
