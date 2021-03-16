@@ -1,0 +1,22 @@
+#!/bin/bash
+
+kubermachines() {
+    if [[ $@ == "install" ]]; then
+        curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/install.sh | bash
+    
+    elif [[ $@ == "configure" ]]; then 
+	curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/up.sh  | bash
+    
+    elif [[ $@ == "up" ]]; then
+        tilt up
+    
+    elif [[ $@ == "down" ]]; then
+        tilt down
+     
+    elif [[ $@ == "help" ]]; then
+        echo -e "Run 'kubermachines up' to deploy your services in a development space configured for your team.\nUsage: kubermachines COMMAND\n\nAvailable commands:\ninstall     Install dependencies\nconfigure   Set your services configurations\nup          Start Kubermachines with the given Tiltfile args\ndown        Delete resources created by 'kubermachines up'\n"
+
+    else 
+	    echo -e "kubermachines: '$@' is not a kubermachines command.\nSee 'kubermachines help' for usage."
+    fi
+}
