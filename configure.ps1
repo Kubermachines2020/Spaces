@@ -1,7 +1,7 @@
 # Kubermachines configure
 #
 # Usage:
-#   iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.ps1')
+#   iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/configure.ps1')
 
 Copy-Item $home\contextfile.yml -Destination $home\.kube\config
 
