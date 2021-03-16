@@ -51,7 +51,7 @@ iex "$dest verify-install"
 
 .\setx /M path "%path%;$HOME\bin"
 
-Set-Alias kubermachines "$HOME\bin\tilt.exe" -Scope Global
+#Set-Alias kubermachines "$HOME\bin\tilt.exe" -Scope Global
 
 Write-Output "Kubermachines installed!"
 Write-Output "Run 'kubermachines up' to start."
