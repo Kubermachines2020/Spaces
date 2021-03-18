@@ -25,11 +25,6 @@ kubermachines() {
 	     echo -e "'$2' is not a kubermachines $1 option. See 'kubermachines help' for usage."
         fi
 
-
-    elif [[ $@ == "configure" ]]; then
-        export CONTEXT_FILE="contextfile.yml"
-        curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/configure.sh  | bash
-
     elif [[ $@ == "up" ]]; then
         tilt up
     
