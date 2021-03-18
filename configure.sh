@@ -8,8 +8,7 @@ REGISTRY=${REGISTRY#*=}
 
 function kubermachines_configure (){
   echo $PWD | docker login --username $USERNAME --password-stdin $REGISTRY
-  mv contextfile.yml ~/.kube/config
-  export KUBECONFIG=contextfile.yml
+  cp $CONTEXT_FILE ~/.kube/config
 }
 
 kubermachines_configure
