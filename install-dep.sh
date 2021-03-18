@@ -1,6 +1,23 @@
 #!/bin/bash
 # Install dependencies
 
+
+# Install kubermachines
+cp kubermachines /usr/local/bin/
+chmod +x /usr/local/bin/kubermachines
+printf "\nif [[ -f /usr/local/bin/kubermachines ]]; then\n    source /usr/local/bin/kubermachines\nfi" >> $HOME/.bashrc
+source $HOME/.bashrc
+
+# dependencies installer
+#
+
+# When releasing Tilt, the releaser should update this version number
+# AFTER they upload new binaries.
+VERSION="0.18.8"
+BREW=$(command -v brew)
+
+set -e
+
 function copy_binary() {
   if [[ ":$PATH:" == *":$HOME/.local/bin:"* ]]; then
       if [ ! -d "$HOME/.local/bin" ]; then
@@ -56,6 +73,33 @@ function kubermachines_install() {
 
   set +x
 }
+
+
+function version_check() {
+  VERSION_FROM_BIN="$(tilt version 2>&1 || true)"
+  RUBY_TILT_PATTERN="template engine not found"
+  TILT_DEV_PATTERN='^v[0-9]+\.[0-9]+\.[0-9]+(-dev)?, built [0-9]+-[0-9]+-[0-9]+$'
+  if [[ $VERSION_FROM_BIN =~ $RUBY_TILT_PATTERN ]]; then
+    echo "Tilt installed!"
+    echo
+    echo "Note: the ruby templating program named 'tilt' (at $(command -v tilt)) appears before tilt.dev's tilt in your \$PATH."
+    echo "You'll need to adjust your \$PATH, uninstall the other tilt, rename tilt, or use an absolute path to run tilt.dev's tilt. See https://docs.tilt.dev/faq.html."
+    exit 1
+  elif ! [[ $VERSION_FROM_BIN =~ $TILT_DEV_PATTERN ]]; then
+    echo "Tilt installed!"
+    echo
+    echo "Note: it looks like it is not the first program named 'tilt' in your path. \`tilt version\` (running from $(command -v tilt)) did not return a tilt.dev version string."
+    echo "It output this instead:"
+    echo
+    echo "$VERSION_FROM_BIN"
+    echo
+    echo "Perhaps you have a different program named tilt in your \$PATH?"
+    exit 1
+  else
+    echo "Tilt installed! Run \`tilt up\` to start."
+  fi
+}
+
 
 # so that we can skip installation in CI and just test the version check
 if [[ -z $NO_INSTALL ]]; then
