@@ -80,19 +80,6 @@ function kubermachines_install() {
           curl -fsSL https://github.com/tilt-dev/tilt/releases/download/v$VERSION/tilt.$VERSION.mac.x86_64.tar.gz | tar -xzv tilt
           copy_binary
 
-  elif [[ "$OSTYPE" == "windows"* ]]; then
-          set -x
-	  echo "****** Installing Docker ******"
-          
-          echo "****** Installing Kubectl *******"
-          curl -LO https://dl.k8s.io/release/v1.20.0/bin/windows/amd64/kubectl.exe
-          Move-Item -Force -Path "kubectl.exe" -Destination "$home\bin\kubectl.exe"
-
-          echo "****** Installing Tilt *******"
-	  Invoke-WebRequest "https://github.com/tilt-dev/tilt/releases/download/v0.18.11/tilt.0.18.11.windows.x86_64.zip" -OutFile "tilt.zip"
-          Expand-Archive "tilt.zip" -DestinationPath "tilt"
-          Move-Item -Force -Path "tilt\tilt.exe" -Destination "$home\bin\tilt.exe"
-
   else
 
       set +x
