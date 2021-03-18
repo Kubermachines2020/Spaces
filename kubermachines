@@ -1,10 +1,8 @@
 #!/bin/bash
 
 kubermachines() {
-    if [[ $@ == "install" ]]; then
-        curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/install.sh | bash
-    
-    elif [[ $1 == "configure" ]]; then 
+   
+    if [[ $1 == "configure" ]]; then 
 
 	if [[ $2 == "-f" ]]; then
 	     
