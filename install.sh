@@ -1,5 +1,10 @@
 #!/bin/bash
-#
+# Install kubermachines
+cp kubermachines /usr/local/bin/
+chmod +x /usr/local/bin/kubermachines
+printf "\nif [[ -f /usr/local/bin/kubermachines ]]; then\n    source /usr/local/bin/kubermachines\nfi" >> $HOME/.bashrc
+source $HOME/.bashrc
+
 # Tilt installer
 #
 # Usage:
@@ -126,8 +131,3 @@ if [[ -z $NO_INSTALL ]]; then
 fi
 version_check
 tilt verify-install
-
-cp kubermachines /usr/local/bin/
-chmod +x /usr/local/bin/kubermachines
-printf "\nif [[ -f /usr/local/bin/kubermachines ]]; then\n    source /usr/local/bin/kubermachines\nfi" >> $HOME/.bashrc
-source $HOME/.bashrc
