@@ -3,6 +3,9 @@
 # Usage:
 #   iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/install.ps1')
 
+# Install Kubermachines
+Copy-Item $home\kubermachines.ps1 -Destination $home\bin\kubermachines.ps1
+Set-Alias kubermachines "$HOME\bin\kubermachines.ps1" -Scope Global
 
 $version = "0.18.13"
 $url = "https://github.com/tilt-dev/tilt/releases/download/v" + $version + "/tilt." + $version + ".windows.x86_64.zip"
