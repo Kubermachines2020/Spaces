@@ -16,7 +16,7 @@ kubermachines() {
 
 
 	elif [[ -z $2 ]]; then
-             export CONTEXT_FILE="contextfile.yml"
+             export CONTEXT_FILE="contextfile.yaml"
              curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/configure.sh  | bash
 
 	elif [[ -n $2 ]]; then
