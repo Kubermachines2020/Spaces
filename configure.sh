@@ -8,7 +8,7 @@ REGISTRY=${REGISTRY#*=}
 
 function kubermachines_configure (){
   echo $PWD | docker login --username $USERNAME --password-stdin $REGISTRY
-  mkdir /root/.kube
+  mkdir -p /root/.kube
   cp $CONTEXT_FILE ~/.kube/config
 }
 
