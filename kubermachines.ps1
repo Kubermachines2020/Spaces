@@ -1,7 +1,11 @@
 param(
   [parameter(Mandatory=$true)]
   [String] 
-  $flag
+  $flag,
+
+  [parameter(Mandatory=$false)]
+  [String] 
+  $path
 )
 
 Process {
@@ -12,6 +16,10 @@ Process {
            iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/install.ps1'))
 
   } elseif($flag -ceq "configure"){
+
+           iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/configure.ps1'))
+
+   } elseif(($flag -ceq "configure") -and ($path -ceq "-f") ){
 
            iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/configure.ps1'))
 
@@ -31,3 +39,4 @@ Process {
 
 
  }
+
