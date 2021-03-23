@@ -5,11 +5,11 @@
 Write-Host " You are using $env:contextfile file .."
 $contextfilepath = Get-Content $env:contextfile
 Write-Host " test $contextfilepath test" 
-Copy-Item $contextfilepath -Destination $home\.kube\config
+#Copy-Item $contextfilepath -Destination $home\.kube\config
 
-$context = Get-Content $contextfilepath | Select-String -Pattern '^current-context' | ForEach-Object {
-    -split $_.Line |Select-Object -Last 1
-}
+#$context = Get-Content $contextfilepath | Select-String -Pattern '^current-context' | ForEach-Object {
+#    -split $_.Line |Select-Object -Last 1
+#}
 
-kubectl config use-context $context
+#kubectl config use-context $context
 
