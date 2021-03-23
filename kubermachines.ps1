@@ -19,9 +19,8 @@ Process {
 
            if ($f.Length -ne "0"){
 
-           Write-Host $f
-           #.\setx /M path "%path%;$f"
-           Set-Item -Path Env:contextfile -Value ($Env:contextfile + $f)
+           #Write-Host $f
+           Set-Item -Path Env:contextfile -Value ($Env:contextfile=$f)
            iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/configure.ps1'))
 
            } else {
