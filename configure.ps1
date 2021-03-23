@@ -11,3 +11,4 @@ $context = Get-Content $contextfilepath | Select-String -Pattern '^current-conte
 }
 
 kubectl config use-context $context
+
