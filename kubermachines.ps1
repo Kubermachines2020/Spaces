@@ -1,15 +1,15 @@
 param(
-  [parameter(Mandatory=$true)]
+  [parameter(Mandatory=$false, Position = 0)]
+  [AllowEmptyString()]
   [String] 
   $flag,
 
-  [parameter(Mandatory=$false)]
-  [String] 
-  $path
+  [parameter(Mandatory=$false, Position = 1)]
+  [string] 
+  $f
 )
 
 Process {
-
 
   if($flag -ceq "install") {
 
@@ -17,11 +17,17 @@ Process {
 
   } elseif($flag -ceq "configure"){
 
+           if ($f.Length -ne "0"){
+
+           Write-Host $f
+           #.\setx /M path "%path%;$f"
+           Set-Item -Path Env:contextfile -Value ($Env:contextfile + $f)
            iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/configure.ps1'))
 
-   } elseif(($flag -ceq "configure") -and ($path -ceq "-f") ){
-
+           } else {
+           
            iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/configure.ps1'))
+           }
 
   } elseif($flag -ceq "up"){
 
@@ -39,4 +45,3 @@ Process {
 
 
  }
-
