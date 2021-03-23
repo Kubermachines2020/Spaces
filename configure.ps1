@@ -2,7 +2,7 @@
 #
 # Usage:
 #   iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/Kubermachines2020/Spaces/windows/configure.ps1')
-
+Write-Host $env:contextfile
 Copy-Item $env:contextfile -Destination $home\.kube\config
 
 $context = Get-Content $env:contextfile | Select-String -Pattern '^current-context' | ForEach-Object {
