@@ -1,38 +1,71 @@
 #!/bin/bash
+        kubermachines() {
+           
+            if [[ $1 == "configure" ]]; then 
+        
+                 if [[ $2 == "-f" ]]; then
+               
+                     if [[ -n $3 ]]; then 
+                        export CONTEXT_FILE=$3
+                        curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/configure.sh  | bash
+        
+                     elif [[ -z $3 ]]; then
+                        echo -e "Context file path is missing."		
+                 fi
+        
+                 elif [[ -z $2 ]]; then
+                     export CONTEXT_FILE="contextfile.yaml"
+                     curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/configure.sh  | bash
+        
+                 elif [[ -n $2 ]]; then
+                     echo -e "'$2' is not a kubermachines $1 option. See 'kubermachines help' for usage."
+                 fi
+        
+            elif [[ $@ == "up" ]]; then
+                cat /dev/null > kubermachines.log
+                tilt up >> kubermachines.log &  2> stderrfile
+                #tail -f kubermachines.log
+                
+                webhook=0
+                #until [ $webhook -eq 1 ]; do 
+                while [ $webhook -eq 0 ]; do
+                      count=$(grep -o "STEP 3/3" kubermachines.log | wc -l)
+                      if [[ $count != 0 ]];then
+                              echo "Publishing .."
+                              webhook=1
+                      else 
+                         echo "fetching in logs"
+                       fi
 
-kubermachines() {
-   
-    if [[ $1 == "configure" ]]; then 
+                done
 
-	if [[ $2 == "-f" ]]; then
-	     
-             if [[ -n $3 ]]; then 
-                export CONTEXT_FILE=$3
-	        curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/configure.sh  | bash
+               echo "out of loop"
+                
+               sleep 30
+               echo "launching webhook"
+               curl -X POST -H 'Content-Type: application/json' -H 'cloud-uuid: ce6fbd10-6240-11eb-847f-8e84d23e2c1a' https://console.kubermachines.com:8888/kubernetes/space_definition/7bef6c34-8bda-11eb-963d-3e98a8680f60/space_publish_webhook
+                echo "Your application has been published successfully !" 
+                      
+                
+            
+            elif [[ $@ == "down" ]]; then
+                tilt down
+                pkill tilt
+                curl -X POST -H 'Content-Type: application/json' -H 'cloud-uuid: ce6fbd10-6240-11eb-847f-8e84d23e2c1a' https://console.kubermachines.com:8888/kubernetes/space_definition/7bef6c34-8bda-11eb-963d-3e98a8680f60/space_unpublish_webhook
+             
+            elif [[ $@ == "help" ]]; then
+                echo -e "Run 'kubermachines up' to deploy your services in a development space configured for your team.
+Usage: kubermachines COMMAND
 
-	     elif [[ -z $3 ]]; then
-	        echo -e "Context file path is missing."		
-	     fi
-
-
-	elif [[ -z $2 ]]; then
-             export CONTEXT_FILE="contextfile.yaml"
-             curl -fsSL https://raw.githubusercontent.com/Kubermachines2020/Spaces/main/configure.sh  | bash
-
-	elif [[ -n $2 ]]; then
-	     echo -e "'$2' is not a kubermachines $1 option. See 'kubermachines help' for usage."
-        fi
-
-    elif [[ $@ == "up" ]]; then
-        tilt up
-    
-    elif [[ $@ == "down" ]]; then
-        tilt down
-     
-    elif [[ $@ == "help" ]]; then
-        echo -e "Run 'kubermachines up' to deploy your services in a development space configured for your team.\nUsage: kubermachines COMMAND\n\nAvailable commands:\ninstall     Install dependencies\nconfigure   Set your services configurations\nup          Start Kubermachines with the given Tiltfile args\ndown        Delete resources created by 'kubermachines up'\n"
-
-    else 
-	    echo -e "kubermachines: '$@' is not a kubermachines command.\nSee 'kubermachines help' for usage."
-    fi
-}
+Available commands:
+install     Install dependencies
+configure   Set your services configurations
+up          Start Kubermachines with the given Tiltfile args
+down        Delete resources created by 'kubermachines up'
+"
+        
+            else 
+              echo -e "kubermachines: '$@' is not a kubermachines command.
+See 'kubermachines help' for usage."
+            fi
+        }
