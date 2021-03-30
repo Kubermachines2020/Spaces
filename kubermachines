@@ -40,8 +40,8 @@
         
             elif [[ $@ == "up" ]]; then
                 cat /dev/null > kubermachines.log
-                { tilt up --host 178.18.31.62 >> kubermachines.log & } 2>/dev/null; sleep .1;
-                echo -e "Open http://178.18.31.62:10350 in browser"
+                { tilt up >> kubermachines.log & } 2>/dev/null; sleep .1;
+                echo -e "Open http://localhost:10350 in browser"
                 #tail -f kubermachines.log
                 
                 webhook=0
