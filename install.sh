@@ -121,7 +121,8 @@ function version_check() {
     echo "Perhaps you have a different program named tilt in your \$PATH?"
     exit 1
   else
-    echo "Tilt installed! Run \`tilt up\` to start."
+    echo "Kubermachines installed! Run \`kubermachines configure\` to access your cluster."
+    echo "Run \`kubermachines up\` to start."
   fi
 }
 
